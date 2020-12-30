@@ -12,17 +12,17 @@ declare global {
    }
 }
 
-type TodolistType = {
+export type TodolistType = {
    id: string
    title: string
-   filter: FilterType
+   filter: FilterValuesType
 }
-export type FilterType = 'all' | 'active' | 'completed';
+export type FilterValuesType = 'all' | 'active' | 'completed';
 type TasksType = {
    [key: string]: Array<TaskType>
 }
 
-const filterTasks = (tasks: Array<TaskType>, filter: FilterType) => {
+const filterTasks = (tasks: Array<TaskType>, filter: FilterValuesType) => {
    if (filter === 'completed') {
       return tasks.filter(task => task.isDone);
    } else if (filter === 'active') {
@@ -62,7 +62,6 @@ function App() {
 
       setTasks({...tasks});
    }
-
    const addTodolist = (title: string) => {
       let todolist: TodolistType = {
          id: v1(),
@@ -75,11 +74,12 @@ function App() {
          [todolist.id]: []
       });
    }
-
    const changeTodolistTitle = (title: string, todolistId: string) => setTodolists(
       todolists.map(t => t.id === todolistId ? {...t, title} : t)
    );
-
+   const changeFilter = (filter: FilterValuesType, todoListID: string) => {
+      setTodolists(todolists.map(tl => tl.id === todoListID ? {...tl, filter} : tl));
+   };
 
    const removeTask = (taskId: string, todoListID: string) => {
       setTasks({
@@ -87,7 +87,6 @@ function App() {
          [todoListID]: tasks[todoListID].filter(task => task.id !== taskId)
       });
    };
-
    const addTask = (title: string, todoListID: string) => {
       const newTask = {id: v1(), title: title, isDone: false};
       setTasks({
@@ -95,7 +94,6 @@ function App() {
          [todoListID]: [newTask, ...tasks[todoListID]]
       });
    }
-
    const changeStatusTask = (id: string, isDone: boolean, todoListID: string) => {
       setTasks({
          ...tasks,
@@ -108,9 +106,6 @@ function App() {
          [todoListID]: tasks[todoListID].map(task => task.id === id ? {...task, title} : task)
       });
    }
-   const changeFilter = (filter: FilterType, todoListID: string) => {
-      setTodolists(todolists.map(tl => tl.id === todoListID ? {...tl, filter} : tl));
-   };
 
    return (
       <div className="App">
