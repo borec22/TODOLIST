@@ -1,13 +1,13 @@
-import {TasksType} from '../App';
+import {TasksType} from '../../AppRedux';
 import {v1} from 'uuid';
-import {ADD_TODOLIST, addTodolistAC, REMOVE_TODOLIST, removeTodolistAC} from './todolist-reducer/todolists-reducer';
+import {ADD_TODOLIST, addTodolistAC, REMOVE_TODOLIST, removeTodolistAC} from '../todolist-reducer/todolists-reducer';
 
 const REMOVE_TASK = 'REMOVE-TASK';
 const ADD_TASK = 'ADD-TASK';
 const CHANGE_STATUS_TASK = 'CHANGE-STATUS-TASK';
 const CHANGE_TITLE_TASK = 'CHANGE-TITLE-TASK';
 
-export type actionsType =
+export type ActionsTypeTasks =
    ReturnType<typeof removeTaskAC> |
    ReturnType<typeof addTaskAC> |
    ReturnType<typeof changeStatusTaskAC> |
@@ -15,7 +15,9 @@ export type actionsType =
    ReturnType<typeof addTodolistAC> |
    ReturnType<typeof removeTodolistAC>;
 
-export const tasksReducer = (state: TasksType, action: actionsType) => {
+const initialState: TasksType = {};
+
+export const tasksReducer = (state: TasksType = initialState, action: ActionsTypeTasks) => {
    switch (action.type) {
       case REMOVE_TASK:
          return {
@@ -55,7 +57,7 @@ export const tasksReducer = (state: TasksType, action: actionsType) => {
          const {[action.id]: tasksOfRemoveTodolist, ...rest} = state;
          return {...rest};
       default:
-         throw new Error('I don`t understand action type');
+         return state;
    }
 }
 

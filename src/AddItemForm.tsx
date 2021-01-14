@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
-import {AddBox, Delete} from '@material-ui/icons';
+import {AddBox} from '@material-ui/icons';
 
 type AddItemFormPropsType = {
    addItem: (title: string) => void
@@ -15,7 +15,7 @@ export function AddItemForm(props: AddItemFormPropsType) {
    }
 
    const add = () => {
-      if (title.trim() == '') {
+      if (title.trim() === '') {
          setError('Field is required');
          return;
       }

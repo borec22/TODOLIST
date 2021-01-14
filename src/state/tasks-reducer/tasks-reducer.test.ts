@@ -1,7 +1,7 @@
 import {v1} from 'uuid';
-import {TasksType} from '../App';
+import {TasksType} from '../../App';
 import {addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from './tasks-reducer';
-import {addTodolistAC, removeTodolistAC} from './todolist-reducer/todolists-reducer';
+import {addTodolistAC, removeTodolistAC} from '../todolist-reducer/todolists-reducer';
 
 let todoListId1: string;
 let todoListId2: string;
@@ -27,7 +27,6 @@ beforeEach(() => {
 })
 
 test('task of correct todolist should be deleted', () => {
-
    let action = removeTaskAC('2', todoListId2);
    let endState: TasksType = tasksReducer(startState, action);
 
