@@ -4,7 +4,7 @@ import {changeStatusTaskAC, changeTitleTaskAC, removeTaskAC} from './state/tasks
 import {Checkbox, IconButton} from '@material-ui/core';
 import {EditableSpan} from './EditableSpan';
 import {Delete} from '@material-ui/icons';
-import {TaskType} from './Todolist';
+import {TaskStatusesType, TaskType} from './api/task-api';
 
 export type TaskProsType = {
    task: TaskType
@@ -19,14 +19,19 @@ export const Task: React.FC<TaskProsType> = React.memo((props) => {
       dispatch(removeTaskAC(task.id, todolistId));
 
    const changeStatusTaskHandler = (e: ChangeEvent<HTMLInputElement>) =>
-      dispatch(changeStatusTaskAC(task.id, e.currentTarget.checked, todolistId));
+      dispatch(
+         changeStatusTaskAC(
+            task.id,
+            e.currentTarget.checked ? TaskStatusesType.Completed : TaskStatusesType.New,
+            todolistId)
+      );
 
    const changeTitleTaskHandler = useCallback((title: string) =>
       dispatch(changeTitleTaskAC(task.id, title, todolistId)), [todolistId, task]);
 
    return (
-      <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-         <Checkbox checked={task.isDone}
+      <li key={task.id} className={task.status === TaskStatusesType.Completed ? 'is-done' : ''}>
+         <Checkbox checked={task.status === TaskStatusesType.Completed}
                    color="primary"
                    onChange={changeStatusTaskHandler}/>
 
