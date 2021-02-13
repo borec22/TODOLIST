@@ -40,7 +40,7 @@ export type TaskType = {
    addedDate: string
 }
 
-export type UpdateTaskModelType = {
+export type UpdateApiTaskModelType = {
    title: string
    description: string
    status: number
@@ -87,7 +87,7 @@ export const tasksAPI = {
    updateTask(
       todolistId: string,
       taskId: string,
-      model: UpdateTaskModelType
+      model: UpdateApiTaskModelType
    ) {
       return instance.put<BaseResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`,
          model);

@@ -1,7 +1,8 @@
 import {v1} from 'uuid';
-import {addTaskAC, changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer, TasksType} from './tasks-reducer';
+import {addTaskAC, removeTaskAC, tasksReducer, TasksType, updateTaskAC} from './tasks-reducer';
 import {addTodolistAC, removeTodolistAC} from '../todolist-reducer/todolists-reducer';
-import {TaskPriorities, TaskStatusesType} from '../../api/task-api';
+import {TaskPriorities, TaskStatusesType, TaskType} from '../../api/task-api';
+import {TodolistType} from '../../api/todolist-api';
 
 let todoListId1: string;
 let todoListId2: string;
@@ -87,7 +88,7 @@ beforeEach(() => {
 })
 
 test('task of correct todolist should be deleted', () => {
-   let action = removeTaskAC('2', todoListId2);
+   let action = removeTaskAC(todoListId2, '2');
    let endState: TasksType = tasksReducer(startState, action);
 
    expect(endState[todoListId1].length).toBe(4);
@@ -99,23 +100,34 @@ test('task of correct todolist should be deleted', () => {
 });
 
 test('task of correct todolist should be added', () => {
-   let taskTitle = 'New Task';
+   let task: TaskType = {
+      id: '5',
+      title: 'New Task',
+      status: TaskStatusesType.New,
+      addedDate: '',
+      deadline: '',
+      description: '',
+      order: 0,
+      priority: TaskPriorities.Middle,
+      startDate: '',
+      todoListId: todoListId1
+   }
 
-   let action = addTaskAC(taskTitle, todoListId1);
+   let action = addTaskAC(task);
 
    let endState: TasksType = tasksReducer(startState, action);
 
    expect(endState[todoListId1].length).toBe(5);
    expect(endState[todoListId2].length).toBe(2);
 
-   expect(endState[todoListId1][0].title).toBe(taskTitle);
+   expect(endState[todoListId1][0].title).toBe('New Task');
    expect(endState[todoListId1][0].status).toBe(TaskStatusesType.New);
 });
 
 test('task of correct todolist should be have another status', () => {
    let newStatus = TaskStatusesType.Completed;
 
-   let action = changeStatusTaskAC('1', newStatus, todoListId2);
+   let action = updateTaskAC('1', {status: newStatus}, todoListId2);
 
    let endState: TasksType = tasksReducer(startState, action);
 
@@ -128,7 +140,9 @@ test('task of correct todolist should be have another status', () => {
 test('task of correct todolist should be have another title', () => {
    let newTaskTitle = 'new task';
 
-   let action = changeTitleTaskAC('4', newTaskTitle, todoListId1);
+
+
+   let action = updateTaskAC('4', {title: newTaskTitle}, todoListId1);
 
    let endState: TasksType = tasksReducer(startState, action);
 
@@ -139,7 +153,14 @@ test('task of correct todolist should be have another title', () => {
 });
 
 test('when add todolist we should have tasks for this todolist in TASKS', () => {
-   let action = addTodolistAC('title of todolist');
+   const todolistReceivedFromServer: TodolistType = {
+      "id": "60161c17-e72d-48e6-9336-4fed822d140b",
+      "title": "POSTMAN",
+      "addedDate": "2021-02-13T09:57:33.0335444Z",
+      "order": -4
+   }
+
+   let action = addTodolistAC(todolistReceivedFromServer);
 
    let endState: TasksType = tasksReducer(startState, action);
 

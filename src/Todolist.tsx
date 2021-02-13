@@ -1,17 +1,18 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, ButtonGroup, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
-import {useSelector} from 'react-redux';
-import {AppRootStateType, useDispatch} from './state/store';
-import {addTaskAC} from './state/tasks-reducer/tasks-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from './state/store';
+import {addTaskAC, addTaskTC} from './state/tasks-reducer/tasks-reducer';
+import {getTasksTC} from './state/tasks-reducer/tasks-reducer';
 import {
    changeTodolistFilterAC,
-   changeTodolistTitleAC,
+   changeTodolistTitleAC, changeTodolistTitleTC,
    FilterValuesType,
-   removeTodolistAC,
+   removeTodolistAC, removeTodolistTC,
    TodolistDomainType
 } from './state/todolist-reducer/todolists-reducer';
 import {Task} from './Task';
@@ -22,7 +23,12 @@ type PropsType = {
 }
 
 export const Todolist = React.memo( (props: PropsType) => {
+
    console.log('Todolist called');
+
+   useEffect(() => {
+      dispatch(getTasksTC(props.id));
+   }, [props.id]);
 
    let dispatch = useDispatch();
 
@@ -33,7 +39,7 @@ export const Todolist = React.memo( (props: PropsType) => {
    let filteredTasks = filterTasks(tasks, todolist.filter);
 
    const addTask = useCallback((title: string) => {
-      dispatch(addTaskAC(title, todolist.id));
+      dispatch(addTaskTC(todolist.id, title));
    }, []);
 
    const setAll = useCallback(() => dispatch(changeTodolistFilterAC(todolist.id, 'all')), []);
@@ -41,13 +47,13 @@ export const Todolist = React.memo( (props: PropsType) => {
    const setCompleted = useCallback(() => dispatch(changeTodolistFilterAC(todolist.id, 'completed')), []);
 
    const changeTodolistTitleHandler = useCallback((title: string) =>
-      dispatch(changeTodolistTitleAC(todolist.id, title)), []);
+      dispatch(changeTodolistTitleTC(todolist.id, title)), []);
 
    return (
       <div>
          <h3><EditableSpan title={todolist.title} onChange={changeTodolistTitleHandler}/>
             <IconButton onClick={() => {
-               dispatch(removeTodolistAC(todolist.id));
+               dispatch(removeTodolistTC(todolist.id));
             }}>
                <Delete/>
             </IconButton>
