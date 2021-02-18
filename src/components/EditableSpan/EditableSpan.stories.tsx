@@ -1,6 +1,6 @@
-import {Button, ButtonProps} from './stories/Button';
+import {Button, ButtonProps} from '../../stories/Button';
 import {Meta, Story} from '@storybook/react/types-6-0';
-import {AddItemForm, AddItemFormPropsType} from './AddItemForm';
+import {AddItemForm, AddItemFormPropsType} from '../AddItemForm/AddItemForm';
 import React from 'react';
 import {action} from '@storybook/addon-actions';
 import {EditableSpan, EditableSpanProps} from './EditableSpan';

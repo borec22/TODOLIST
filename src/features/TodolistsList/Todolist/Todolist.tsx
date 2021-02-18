@@ -1,34 +1,31 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {AddItemForm} from './AddItemForm';
-import {EditableSpan} from './EditableSpan';
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import {Button, ButtonGroup, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './state/store';
-import {addTaskAC, addTaskTC} from './state/tasks-reducer/tasks-reducer';
-import {getTasksTC} from './state/tasks-reducer/tasks-reducer';
+import {AppRootStateType} from '../../../app/store';
+import {addTaskAC, addTaskTC} from '../tasks-reducer';
+import {getTasksTC} from '../tasks-reducer';
 import {
    changeTodolistFilterAC,
    changeTodolistTitleAC, changeTodolistTitleTC,
    FilterValuesType,
    removeTodolistAC, removeTodolistTC,
    TodolistDomainType
-} from './state/todolist-reducer/todolists-reducer';
-import {Task} from './Task';
-import {TaskStatusesType, TaskType} from './api/task-api';
+} from '../todolists-reducer';
+import {Task} from './Task/Task';
+import {TaskStatusesType, TaskType} from '../../../api/task-api';
 
 type PropsType = {
    id: string
 }
 
 export const Todolist = React.memo( (props: PropsType) => {
-
-   console.log('Todolist called');
-
    useEffect(() => {
       dispatch(getTasksTC(props.id));
-   }, [props.id]);
+   }, []);
 
    let dispatch = useDispatch();
 

@@ -1,7 +1,7 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux';
-import {todolistsReducer, ActionsTypeTodolist} from './todolist-reducer/todolists-reducer';
-import {tasksReducer, ActionsTypeTasks} from './tasks-reducer/tasks-reducer';
-import {getTodolistsTC} from './todolist-reducer/todolists-reducer';
+import {todolistsReducer, ActionsTodolistsType} from '../features/TodolistsList/todolists-reducer';
+import {tasksReducer, ActionsTasksType} from '../features/TodolistsList/tasks-reducer';
+import {getTodolistsTC} from '../features/TodolistsList/todolists-reducer';
 import {useDispatch as _useDispatch} from 'react-redux';
 import thunk from 'redux-thunk';
 
@@ -19,5 +19,5 @@ window.store = store;
 
 export const useDispatch = () => {
    let dispatch = _useDispatch();
-   return (ac: ActionsTypeTodolist | ActionsTypeTasks) => dispatch(ac);
+   return (ac: ActionsTodolistsType | ActionsTasksType) => dispatch(ac);
 }

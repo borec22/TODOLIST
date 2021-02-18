@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import axios from 'axios';
-import {todolistAPI} from './api/todolist-api';
-import {tasksAPI, UpdateApiTaskModelType} from './api/task-api';
+import {todolistAPI} from '../api/todolist-api';
+import {tasksAPI, UpdateApiTaskModelType} from '../api/task-api';
 
 export default {
    title: 'API'

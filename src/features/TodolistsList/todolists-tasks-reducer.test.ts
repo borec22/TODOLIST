@@ -4,11 +4,11 @@ import {
    setTodolistsAC,
    TodolistDomainType,
    todolistsReducer
-} from './todolist-reducer/todolists-reducer';
-import {tasksReducer, TasksType} from './tasks-reducer/tasks-reducer';
+} from './todolists-reducer';
+import {tasksReducer, TasksType} from './tasks-reducer';
 import {v1} from 'uuid';
-import {TaskPriorities, TaskStatusesType} from '../api/task-api';
-import {TodolistType} from '../api/todolist-api';
+import {TaskPriorities, TaskStatusesType} from '../../api/task-api';
+import {TodolistType} from '../../api/todolist-api';
 
 test('ids should be equals', () => {
    const startTasksState: TasksType = {};

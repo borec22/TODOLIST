@@ -1,9 +1,9 @@
 import React, {ChangeEvent, useCallback} from 'react';
-import {removeTaskTC, updateTaskTC} from './state/tasks-reducer/tasks-reducer';
+import {removeTaskTC, updateTaskTC} from '../../tasks-reducer';
 import {Checkbox, IconButton} from '@material-ui/core';
-import {EditableSpan} from './EditableSpan';
+import {EditableSpan} from '../../../../components/EditableSpan/EditableSpan';
 import {Delete} from '@material-ui/icons';
-import {TaskStatusesType, TaskType} from './api/task-api';
+import {TaskStatusesType, TaskType} from '../../../../api/task-api';
 import {useDispatch} from 'react-redux';
 
 export type TaskProsType = {
