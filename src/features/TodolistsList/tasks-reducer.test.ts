@@ -1,7 +1,14 @@
 import {v1} from 'uuid';
-import {addTaskAC, removeTaskAC, tasksReducer, TasksType, updateTaskAC} from './tasks-reducer';
+import {
+   addTaskAC,
+   changeTaskEntityStatusAC,
+   removeTaskAC, TaskDomainType,
+   tasksReducer,
+   TasksType,
+   updateTaskAC
+} from './tasks-reducer';
 import {addTodolistAC, removeTodolistAC} from './todolists-reducer';
-import {TaskPriorities, TaskStatusesType, TaskType} from '../../api/task-api';
+import {TaskPriorities, TaskStatusesType} from '../../api/task-api';
 import {TodolistType} from '../../api/todolist-api';
 
 let todoListId1: string;
@@ -25,7 +32,8 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId1
+            todoListId: todoListId1,
+            entityStatus: 'idle'
          },
          {
             id: '2',
@@ -37,7 +45,8 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId1
+            todoListId: todoListId1,
+            entityStatus: 'idle'
          },
          {
             id: '3', title: 'JS', status: TaskStatusesType.New,
@@ -47,7 +56,8 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId1
+            todoListId: todoListId1,
+            entityStatus: 'idle'
          },
          {
             id: '4',
@@ -59,11 +69,13 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId1
+            todoListId: todoListId1,
+            entityStatus: 'idle'
          },
       ],
       [todoListId2]: [
-         {id: '1',
+         {
+            id: '1',
             title: 'Spartacus',
             status: TaskStatusesType.New,
             addedDate: '',
@@ -72,8 +84,11 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId2},
-         {id: '2',
+            todoListId: todoListId2,
+            entityStatus: 'idle'
+         },
+         {
+            id: '2',
             title: 'Tom and Jerry',
             status: TaskStatusesType.New,
             addedDate: '',
@@ -82,7 +97,9 @@ beforeEach(() => {
             order: 0,
             priority: TaskPriorities.Middle,
             startDate: '',
-            todoListId: todoListId2},
+            todoListId: todoListId2,
+            entityStatus: 'idle'
+         },
       ]
    }
 })
@@ -100,7 +117,7 @@ test('task of correct todolist should be deleted', () => {
 });
 
 test('task of correct todolist should be added', () => {
-   let task: TaskType = {
+   let task: TaskDomainType = {
       id: '5',
       title: 'New Task',
       status: TaskStatusesType.New,
@@ -110,7 +127,8 @@ test('task of correct todolist should be added', () => {
       order: 0,
       priority: TaskPriorities.Middle,
       startDate: '',
-      todoListId: todoListId1
+      todoListId: todoListId1,
+      entityStatus: 'idle'
    }
 
    let action = addTaskAC(task);
@@ -137,9 +155,17 @@ test('task of correct todolist should be have another status', () => {
    expect(endState[todoListId2][0].status).toBe(newStatus);
 });
 
+test('task of correct todolist should be have another entityStatus', () => {
+   let endState: TasksType = tasksReducer(startState, changeTaskEntityStatusAC('1', 'loading', todoListId1));
+
+   expect(endState[todoListId1].length).toBe(4);
+   expect(endState[todoListId2].length).toBe(2);
+
+   expect(endState[todoListId1][0].entityStatus).toBe('loading');
+});
+
 test('task of correct todolist should be have another title', () => {
    let newTaskTitle = 'new task';
-
 
 
    let action = updateTaskAC('4', {title: newTaskTitle}, todoListId1);
@@ -154,10 +180,10 @@ test('task of correct todolist should be have another title', () => {
 
 test('when add todolist we should have tasks for this todolist in TASKS', () => {
    const todolistReceivedFromServer: TodolistType = {
-      "id": "60161c17-e72d-48e6-9336-4fed822d140b",
-      "title": "POSTMAN",
-      "addedDate": "2021-02-13T09:57:33.0335444Z",
-      "order": -4
+      'id': '60161c17-e72d-48e6-9336-4fed822d140b',
+      'title': 'POSTMAN',
+      'addedDate': '2021-02-13T09:57:33.0335444Z',
+      'order': -4
    }
 
    let action = addTodolistAC(todolistReceivedFromServer);

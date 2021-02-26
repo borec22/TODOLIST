@@ -5,19 +5,32 @@ import {AppRootStateType} from '../../app/store';
 import {Box, Grid, Paper} from '@material-ui/core';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
+import {Redirect} from 'react-router-dom';
 
-export const TodolistsList = () => {
+type PropsType = {
+   demo?: boolean
+}
+
+export const TodolistsList: React.FC<PropsType> = ({demo = false, ...props}) => {
    useEffect(() => {
-      dispatch(getTodolistsTC())
-   }, [])
+      if (demo || !isLoggedIn) {
+         return;
+      }
+      dispatch(getTodolistsTC());
+   }, []);
 
    let dispatch = useDispatch();
+   const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
 
    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
 
    const addTodolist = useCallback((title: string) => {
       dispatch(addTodolistTC(title));
    }, []);
+
+   if (!isLoggedIn) {
+      return <Redirect to={'/login'}/>
+   }
 
    return (
       <>
@@ -32,7 +45,7 @@ export const TodolistsList = () => {
                   <Grid item key={todolist.id}>
                      <Paper>
                         <Box p={2}>
-                           <Todolist key={todolist.id} id={todolist.id}/>
+                           <Todolist key={todolist.id} id={todolist.id} demo={demo}/>
                         </Box>
                      </Paper>
                   </Grid>

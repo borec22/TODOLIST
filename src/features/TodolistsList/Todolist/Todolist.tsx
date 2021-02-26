@@ -6,24 +6,27 @@ import {Button, ButtonGroup, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../app/store';
-import {addTaskAC, addTaskTC} from '../tasks-reducer';
-import {getTasksTC} from '../tasks-reducer';
+import {addTaskTC, getTasksTC, TaskDomainType} from '../tasks-reducer';
 import {
    changeTodolistFilterAC,
-   changeTodolistTitleAC, changeTodolistTitleTC,
+   changeTodolistTitleTC,
    FilterValuesType,
-   removeTodolistAC, removeTodolistTC,
+   removeTodolistTC,
    TodolistDomainType
 } from '../todolists-reducer';
 import {Task} from './Task/Task';
-import {TaskStatusesType, TaskType} from '../../../api/task-api';
+import {TaskStatusesType} from '../../../api/task-api';
 
 type PropsType = {
    id: string
+   demo?: boolean
 }
 
-export const Todolist = React.memo( (props: PropsType) => {
+export const Todolist: React.FC<PropsType> = React.memo(({demo = false, ...props}) => {
    useEffect(() => {
+      if (demo) {
+         return;
+      }
       dispatch(getTasksTC(props.id));
    }, []);
 
@@ -32,7 +35,7 @@ export const Todolist = React.memo( (props: PropsType) => {
    let todolist = useSelector<AppRootStateType, TodolistDomainType>(state =>
       state.todolists.filter(todolist => todolist.id === props.id)[0]);
 
-   let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.id]);
+   let tasks = useSelector<AppRootStateType, Array<TaskDomainType>>(state => state.tasks[props.id]);
    let filteredTasks = filterTasks(tasks, todolist.filter);
 
    const addTask = useCallback((title: string) => {
@@ -48,19 +51,26 @@ export const Todolist = React.memo( (props: PropsType) => {
 
    return (
       <div>
-         <h3><EditableSpan title={todolist.title} onChange={changeTodolistTitleHandler}/>
+         <h3>
+            <EditableSpan title={todolist.title}
+                          onChange={changeTodolistTitleHandler}
+                          disabled={todolist.entityStatus === 'loading'}
+            />
             <IconButton onClick={() => {
                dispatch(removeTodolistTC(todolist.id));
-            }}>
+            }} disabled={todolist.entityStatus === 'loading'}>
                <Delete/>
             </IconButton>
          </h3>
 
-         <AddItemForm addItem={addTask}/>
+         <AddItemForm addItem={addTask} disabled={todolist.entityStatus === 'loading'}/>
 
          <ul style={{listStyleType: 'none', paddingLeft: '0'}}>
             {
-               filteredTasks.map(task => <Task key={task.id} task={task} todolistId={todolist.id}/>)
+               filteredTasks.map(task => <Task key={task.id}
+                                               task={task}
+                                               todolistId={todolist.id}
+                                               disabled={todolist.entityStatus === 'loading'}/>)
             }
          </ul>
          <div>
@@ -82,9 +92,9 @@ export const Todolist = React.memo( (props: PropsType) => {
          </div>
       </div>
    );
-} );
+});
 
-const filterTasks = (tasks: Array<TaskType>, filter: FilterValuesType) => {
+const filterTasks = (tasks: Array<TaskDomainType>, filter: FilterValuesType) => {
    if (filter === 'completed') {
       return tasks.filter(task => task.status = TaskStatusesType.Completed);
    } else if (filter === 'active') {
