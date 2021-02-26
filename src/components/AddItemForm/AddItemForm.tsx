@@ -1,14 +1,14 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
+import {RequestStatusType} from '../../app/app-reducer';
 
 export type AddItemFormPropsType = {
    addItem: (title: string) => void
+   disabled?: boolean
 }
 
 export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
-   console.log('AddItemForm is called');
-
    const [title, setTitle] = useState('');
    const [error, setError] = useState<string | null>(null);
 
@@ -46,8 +46,11 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
                     onKeyPress={onKeyPressHandler}
                     helperText={error}
                     error={!!error}
+                    disabled={props.disabled}
          />
-         <IconButton onClick={add} color='primary'>
+         <IconButton onClick={add}
+                     color='primary'
+                     disabled={props.disabled}>
             <AddBox/>
          </IconButton>
       </div>
