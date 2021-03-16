@@ -7,15 +7,16 @@ import {Provider} from 'react-redux';
 import {store} from './app/store';
 import {Router} from 'react-router'
 import createHistory from 'history/createBrowserHistory';
+import {HashRouter} from 'react-router-dom';
 
 export const history = createHistory();
 
 
 ReactDOM.render(
    <Provider store={store}>
-      <Router history={history}>
+      <HashRouter>
          <App/>
-      </Router>
+      </HashRouter>
    </Provider>
    , document.getElementById('root'));
 

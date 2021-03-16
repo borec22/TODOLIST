@@ -57,11 +57,11 @@ const App: React.FC<PropsType> = ({demo = false, ...props}) => {
          <ErrorSnackbar/>
          <AppBar position="static">
             <Toolbar>
-               <IconButton edge="start" color="inherit" aria-label="menu">
+               {/*<IconButton edge="start" color="inherit" aria-label="menu">
                   <Menu/>
-               </IconButton>
+               </IconButton>*/}
                <Typography variant="h6">
-                  News
+                  TODOLISTS
                </Typography>
                {!isLoggedIn && <Button color="inherit" onClick={loginHandler}>Login</Button>}
                {isLoggedIn && <Button color='inherit' onClick={logoutHandler}>Log out</Button>}
